@@ -1,7 +1,15 @@
+import org.apache.commons.math3.analysis.function.Exp;
 import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.FluentWait;
+import org.openqa.selenium.support.ui.Wait;
+
+import java.time.Duration;
 
 public class selenium_check {
     public static void main(String[] args) {
@@ -37,6 +45,9 @@ public class selenium_check {
         if(text.equals("Your email, password, IP address or location did not match")){
             System.out.println("Test case passed");
         }
-
+        Wait<WebDriver> wait = new FluentWait<>(driver)
+                .withTimeout(Duration.ofSeconds(20))
+                .pollingEvery(Duration.ofSeconds(2))
+                .ignoring(NoSuchElementException.class);
     }
 }

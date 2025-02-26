@@ -1,6 +1,9 @@
 package Selenium_Action;
 
+import TestListeners.TestingOnListeners;
+//import TestListeners.Testlisteners123;
 import org.openqa.selenium.By;
+//import org.openqa.selenium.Keys;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -8,25 +11,34 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import org.testng.annotations.AfterTest;
-import org.testng.annotations.BeforeTest;
-import org.testng.annotations.Test;
+import org.testng.annotations.*;
 
 import java.time.Duration;
 import java.util.List;
 
+
+@Listeners(TestingOnListeners.class)
 public class selenium_Action1 {
 
     WebDriver driver;
 
-    @BeforeTest
-    public void webtable() throws InterruptedException {
+    @BeforeMethod
+    public void webtable()  {
         driver = new ChromeDriver();
         driver.get("https://www.makemytrip.com/");
         driver.manage().window().maximize();
-        Thread.sleep(2000);
 
     }
+
+
+    @AfterMethod
+    public void tdown(){
+        driver.quit();
+    }
+
+
+
+
 
     @Test
     public void TestWebtable_MakeMyTrip() throws InterruptedException {
@@ -39,19 +51,20 @@ public class selenium_Action1 {
         WebElement from_city = driver.findElement(By.id("fromCity"));
         Actions actions = new Actions(driver);
         actions.moveToElement(from_city).click().build().perform();
-        List<WebElement> elements =  driver.findElements(By.xpath("//ul[@class=\"react-autosuggest__suggestions-list\"]/li"));
-        System.out.println(elements.size());
-        for( WebElement element : elements){
-            if (element.getText().contains("New Delhi")){
-//                System.out.println(element.getText());
-                element.click();
-                break;
-            }
-        }
+        Thread.sleep(3000);
+       driver.findElement(By.xpath("//ul[@class=\"react-autosuggest__suggestions-list\"]/li//p[contains(text(),'New Delhi')]"))
+               .click();
+
+
+         driver.quit();
     }
 
     @Test
     public void drop_Down() throws InterruptedException{
+//        driver = new ChromeDriver();
+//        driver.get("https://www.makemytrip.com/");
+//        driver.manage().window().maximize();
+//        Thread.sleep(2000);
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
         // Wait until the element is visible
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//span[@data-cy='closeModal']")));
@@ -90,16 +103,5 @@ public class selenium_Action1 {
 
         actions.moveToElement(fromCity).keyDown(Keys.ARROW_DOWN).keyDown(Keys.ENTER).perform();
 
-    }
-
-
-    @AfterTest
-    public void Close_browser(){
-        try {
-            Thread.sleep(3000);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-        driver.quit();
     }
 }
